@@ -442,7 +442,7 @@ body {
 }
 
 /* 响应式微调 */
-@ media (max-width: 1000px) {
+@media (max-width: 1000px) {
     .top-nav { right: 10px; }
     .promo-fixed { right: 10px; width: 200px; }
 }
