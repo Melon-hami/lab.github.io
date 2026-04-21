@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>春韵</title>
+    <!-- 引入外部样式表：CSS目录下的样式文件 -->
+    <link rel="stylesheet" href="../lab2-2504-126-index.css">
+</head>
+<body>
+    <!-- 整体页面容器，用于固定定位的参考与布局 -->
+    <div class="page-wrapper">
+
+        <!-- 头部区域：网站Logo + 导航菜单（固定/浮动布局） -->
+        <header class="main-header">
+            <div class="logo-area">
+                <!-- 图片置于img目录，模拟Logo -->
+                <img src="image.jpg" alt="书香满屋Logo" class="logo-img">
+                <span class="site-name">📚 春韵图书</span>
+            </div>
+            <!-- 导航菜单：固定定位 + 浮动布局；导航条本身是固定定位，内部菜单项浮动 -->
+            <nav class="top-nav">
+                <ul class="nav-list clearfix">
+                    <li><a href=" ">首页</a ></li>
+                    <li><a href="#">畅销榜</a ></li>
+                    <li><a href="#">新书</a ></li>
+                    <li><a href="#">关于</a ></li>
+                    <li><a href="#">联系</a ></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 主体内容区：浮动三栏布局（左/中/右） -->
+        <div class="main-content clearfix">
+            
+            <!-- 左侧栏：图书分类导航（相对定位） -->
+            <aside class="sidebar left-sidebar">
+                <div class="category-nav">
+                    <h3>📖 图书分类</h3>
+                    <!-- 相对定位容器：内部可加一些装饰，自身相对定位 -->
+                    <ul class="cat-list">
+                        <li><a href="#">📕 文学小说</a ></li>
+                        <li><a href="#">📗 人文社科</a ></li>
+                        <li><a href="#">📘 经济管理</a ></li>
+                        <li><a href="#">📙 科技科普</a ></li>
+                        <li><a href="#">📔 艺术生活</a ></li>
+                        <li><a href="#">📓 少儿读物</a ></li>
+                        <li><a href="#">🔖 考试教育</a ></li>
+                    </ul>
+                    <!-- 相对定位元素示例：一个“限时特价”标签，相对于父容器偏移 -->
+                    <div class="relative-badge">🔥 今日特价</div>
+                </div>
+            </aside>
+
+            <!-- 中间栏：图书展示区 + 热门推荐 + 新书上市 -->
+            <main class="content-main">
+                <!-- 图书展示区：第一排第一列悬停效果（父相子绝） -->
+                <section class="book-showcase">
+                    <h2>✨ 精选图书 · 第一排</h2>
+                    <!-- 父容器设置相对定位，作为绝对定位的参考 -->
+                    <div class="showcase-grid relative-parent">
+                        <!-- 第一本书：悬停效果 + 绝对定位子元素（父相子绝） -->
+                        <div class="book-card book-card1">
+                            <div class="book-cover">
+                                <img src="image1.jpg" alt="《三体》">
+                                <!-- 鼠标悬停显示隐藏块（绝对定位） -->
+                                <div class="hover-detail">
+                                    <span class="quick-view">🔍 快速预览</span>
+                                </div>
+                            </div>
+                            <h4>深入理解计算机系统</h4>
+                            <p class="price">¥139.00</p >
+                            <!-- cursor: pointer 效果用在按钮上 -->
+                            <button class="add-to-cart">🛒 加入购物车</button>
+                        </div>
+                        <!-- 第二本书（非第一列，依然保持结构） -->
+                        <div class="book-card">
+                            <div class="book-cover">
+                                <img src="image2.jpg" alt="设计模式">
+                                <div class="hover-detail">
+                                    <span class="quick-view">🔍 快速预览</span>
+                                </div>
+                            </div>
+                            <h4>设计模式：可复用面向对象</h4>
+                            <p class="price">¥89.00</p >
+                            <button class="add-to-cart">🛒 加入购物车</button>
+                        </div>
+                        <!-- 第三本书 -->
+                        <div class="book-card">
+                            <div class="book-cover">
+                                <img src="image3.jpg" alt="JavaScript高级程序设计">
+                                <div class="hover-detail">
+                                    <span class="quick-view">🔍 快速预览</span>
+                                </div>
+                            </div>
+                            <h4>JavaScript高级程序设计</h4>
+                            <p class="price">¥129.00</p >
+                            <button class="add-to-cart">🛒 加入购物车</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 热门推荐：浮动排列 -->
+                <section class="hot-recommend">
+                    <h2>🔥 热门推荐</h2>
+                    <div class="hot-list clearfix">
+                        <div class="hot-item">《三体：全集》</div>
+                        <div class="hot-item">《活着》</div>
+                        <div class="hot-item">《人类简史》</div>
+                        <div class="hot-item">《Python编程从入门到实践》</div>
+                        <div class="hot-item">《百年孤独》</div>
+                        <div class="hot-item">《小狗钱钱》</div>
+                    </div>
+                </section>
+
+                <!-- 新书上市：Table布局 -->
+                <section class="new-books">
+                    <h2>📅 新书上市</h2>
+                    <table class="book-table">
+                        <thead>
+                            <tr>
+                                <th>书名</th>
+                                <th>作者</th>
+                                <th>定价</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>人工智能现代方法</td>
+                                <td>Stuart Russell</td>
+                                <td>¥198.00</td>
+                            </tr>
+                            <tr>
+                                <td>微服务架构设计模式</td>
+                                <td>Chris Richardson</td>
+                                <td>¥139.00</td>
+                            </tr>
+                            <tr>
+                                <td>置身事内</td>
+                                <td>兰小欢</td>
+                                <td>¥65.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </main>
+
+            <!-- 右侧栏：促销信息，固定定位 -->
+            <aside class="sidebar right-sidebar">
+                <div class="promo-fixed">
+                    <h3>🎁 限时促销</h3>
+                    <ul class="promo-list">
+                        <li>📌 满300减50</li>
+                        <li>📌 精选图书5折起</li>
+                        <li>📌 新用户专享券</li>
+                        <li>📌 会员日双倍积分</li>
+                    </ul>
+                    <p class="fixed-note">✨ ✨</p >
+                    <!-- 额外装饰 -->
+                    <div class="ad-tag">📢 广告位招租</div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- 简单的页脚，展示版权（非必须，但为了完整） -->
+        <footer class="page-footer">
+            <p>© 2026 春韵 · 实验设计 2504-126 </p >
+        </footer>
+    </div>
+</body>
+</html>
