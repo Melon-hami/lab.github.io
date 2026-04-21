@@ -1,0 +1,455 @@
+/* =========================================
+   lab2-班号-学号后3位-index.css
+   盒子模型 · 浮动布局 · 相对/绝对/固定定位
+   悬停显示隐藏 · cursor: pointer
+   ========================================= */
+
+/* 全局重置 & 盒子模型统一 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;  /* 使宽度包含padding+border，方便计算 */
+}
+
+body {
+    font-family: 'Segoe UI', '微软雅黑', sans-serif;
+    background: #f9f7f3;
+    line-height: 1.5;
+}
+
+/* 清除浮动 */
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* 页面包装器，用于整体布局 */
+.page-wrapper {
+    max-width: 1280px;
+    margin: 0 auto;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+/* ---------- 头部区域 ---------- */
+.main-header {
+    /* 头部本身是块级，内部导航固定 */
+    background: #2c3e50;
+    color: white;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-img {
+    width: 48px;
+    height: 48px;
+    background-color: #ecf0f1;  /* 模拟图片占位，实际img目录下可放置图片 */
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid #bdc3c7;
+    /* 盒子模型测试: 边框+内边距 */
+    padding: 3px;
+    background-clip: content-box;
+}
+
+.site-name {
+    font-size: 1.8rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+/* 导航菜单：固定定位 (fixed) 并且内部使用浮动布局 */
+.top-nav {
+    /* 固定定位 —— 相对于视口固定，注意与头部搭配 */
+    position: fixed;
+    top: 0;
+    right: 30px;      /* 靠右显示，同时避免覆盖logo */
+    background: transparent; 
+    z-index: 999;
+    /* 内边距和外边距均体现盒子模型 */
+    padding: 8px 20px;
+    margin: 8px 0;
+    /* 为了视觉效果加半透明背景 */
+    background-color: rgba(44, 62, 80, 0.85);
+    border-radius: 40px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    backdrop-filter: blur(4px);
+}
+
+/* 导航列表——浮动布局 */
+.nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-list li {
+    float: left;      /* 浮动实现水平排列 */
+    margin: 0 5px;
+}
+
+.nav-list li a {
+    display: inline-block;
+    padding: 8px 18px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 30px;
+    transition: all 0.2s;
+    /* cursor: pointer 效果 */
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.nav-list li a:hover {
+    background-color: #e67e22;
+    color: white;
+    border-color: #f39c12;
+}
+
+/* 头部下方留出空间，因为导航fixed会脱离文档流，但头部高度还在，不影响 */
+/* 注意：固定定位的元素不占空间，需要主体内容避开，已在main-content加padding-top? 
+   因为固定导航在右侧，不会遮挡主要内容，所以无需偏移。 */
+
+/* ---------- 主体内容区：三栏浮动 ---------- */
+.main-content {
+    margin: 20px 24px;
+}
+
+/* 左侧边栏：浮动 + 相对定位 */
+.left-sidebar {
+    float: left;
+    width: 220px;
+    margin-right: 20px;
+    background: #fefefe;
+    border-radius: 16px;
+    /* 盒子模型：内边距、边框、外边距 */
+    padding: 16px 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.02);
+    /* 相对定位：作为参照或者自身偏移 */
+    position: relative;
+    top: 0;       /* 可以微调，但保留relative */
+}
+
+/* 分类导航标题 */
+.category-nav h3 {
+    margin-bottom: 16px;
+    font-size: 1.3rem;
+    border-bottom: 2px dashed #b0c4de;
+    padding-bottom: 10px;
+}
+
+.cat-list {
+    list-style: none;
+}
+
+.cat-list li {
+    margin-bottom: 10px;
+}
+
+.cat-list li a {
+    text-decoration: none;
+    color: #2c3e50;
+    display: block;
+    padding: 8px 10px;
+    border-radius: 30px;
+    background: #f8fafc;
+    border-left: 4px solid #3498db;
+    transition: 0.15s;
+    cursor: pointer;  /* pointer效果 */
+}
+
+.cat-list li a:hover {
+    background: #d4e6f1;
+    border-left-color: #e67e22;
+}
+
+/* 相对定位元素：特价标签，相对自身位置偏移 */
+.relative-badge {
+    position: relative;
+    top: 10px;          /* 相对下移 */
+    left: -5px;
+    background: #e74c3c;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 30px;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 18px;
+    box-shadow: 2px 4px 8px rgba(231, 76, 60, 0.3);
+    cursor: default;
+}
+
+/* 中间栏：浮动 */
+.content-main {
+    float: left;
+    width: calc(100% - 480px);  /* 左220 + 右260(含间隙) */
+    margin-right: 20px;
+    background: #ffffff;
+    padding: 16px 18px;
+    border-radius: 20px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+}
+
+/* 右侧栏：固定定位 + 促销信息 */
+.right-sidebar {
+    float: left;
+    width: 240px;
+    /* 固定定位：脱离文档流，需要小心布局。但实验要求右侧栏固定定位。
+       为了不影响三栏浮动，我们让它在右侧占据位置，同时自身设定fixed。
+       但fixed会破坏浮动。这里采用混合方法：外层占位，内部fixed容器相对视口固定 */
+    position: relative;  /* 用于创建定位上下文，但fixed相对视口 */
+    min-height: 360px;
+}
+
+.promo-fixed {
+    /* 固定定位 —— 右侧栏内容固定在视口右侧 */
+    position: fixed;
+    top: 100px;          /* 避开顶部固定导航 */
+    right: 30px;         /* 靠右 */
+    width: 240px;        /* 与父容器宽度一致 */
+    background: #fff9e6;
+    border-radius: 20px;
+    padding: 22px 16px;
+    border: 2px solid #f1c40f;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+    /* 盒子模型完整展示 */
+    margin: 0;
+    /* 内边距已设置 */
+    z-index: 500;
+}
+
+/* 促销列表 */
+.promo-fixed h3 {
+    color: #b64926;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    border-left: 6px solid #e67e22;
+    padding-left: 12px;
+}
+
+.promo-list {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.promo-list li {
+    padding: 8px 5px;
+    border-bottom: 1px dotted #d4ac0d;
+    font-weight: 500;
+}
+
+.fixed-note {
+    background: #fcf3cf;
+    padding: 8px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    text-align: center;
+    margin: 16px 0 8px;
+}
+
+.ad-tag {
+    margin-top: 20px;
+    background: #d5dbdb;
+    padding: 10px;
+    text-align: center;
+    border-radius: 12px;
+    color: #1e3c4f;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* ---------- 中间栏内部样式 ---------- */
+
+/* 图书展示区 */
+.book-showcase h2 {
+    margin-bottom: 18px;
+    color: #1e3c4f;
+}
+.showcase-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* 父相：relative-parent */
+.relative-parent {
+    position: relative;   /* 作为绝对定位子元素的参考 */
+}
+
+/* 图书卡片 */
+.book-card {
+    background: #fdfdfd;
+    border-radius: 16px;
+    padding: 16px 12px 18px;
+    flex: 1 1 160px;
+    border: 1px solid #dee2e6;
+    transition: box-shadow 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+.book-card:hover {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+/* 第一排第一列：附加悬停效果（父相子绝） */
+.book-card1 .book-cover {
+    position: relative;   /* 子绝父相：让hover-detail绝对定位 */
+}
+
+.book-cover img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    background: #bdc3c7;  /* 模拟图片 */
+    border-radius: 10px;
+    display: block;
+    border: 1px solid #ced4da;
+    padding: 3px;
+    background-clip: content-box;
+}
+
+/* 悬停显示隐藏块（绝对定位） */
+.hover-detail {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;                /* 默认隐藏 */
+    transition: opacity 0.25s;
+    pointer-events: none;      /* 让点击穿透？但快速预览可设置，不影响按钮 */
+    color: white;
+}
+
+/* 悬停时显示 */
+.book-cover:hover .hover-detail {
+    opacity: 1;
+}
+
+.quick-view {
+    background: #e67e22;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;           /* cursor: pointer */
+    pointer-events: auto;      /* 使它可以点击 */
+    box-shadow: 0 2px 8px black;
+}
+
+/* 其他卡片也类似 */
+.book-card h4 {
+    margin: 12px 0 6px;
+    font-size: 1rem;
+}
+.price {
+    color: #c0392b;
+    font-weight: 700;
+    margin: 8px 0;
+}
+.add-to-cart {
+    background: #2ecc71;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 40px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;           /* pointer效果 */
+    border: 1px solid #27ae60;
+    transition: 0.1s;
+}
+.add-to-cart:hover {
+    background: #27ae60;
+}
+
+/* 热门推荐：浮动排列 */
+.hot-recommend {
+    margin-top: 35px;
+}
+.hot-list {
+    margin-top: 12px;
+}
+.hot-item {
+    float: left;
+    width: calc(33.333% - 12px);
+    margin-right: 12px;
+    margin-bottom: 12px;
+    background: #f4f6f9;
+    padding: 12px 8px;
+    border-radius: 30px;
+    text-align: center;
+    border: 1px solid #d5dbdb;
+    font-weight: 500;
+    cursor: pointer;           /* pointer */
+    transition: 0.1s;
+}
+.hot-item:hover {
+    background: #fdebd0;
+    border-color: #e67e22;
+}
+
+/* 新书上市表格 */
+.new-books {
+    margin-top: 40px;
+    clear: both;   /* 清除浮动影响 */
+}
+.book-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    background: white;
+}
+.book-table th {
+    background: #34495e;
+    color: white;
+    padding: 10px;
+}
+.book-table td, .book-table th {
+    border: 1px solid #bdc3c7;
+    padding: 10px 8px;
+}
+.book-table tbody tr:hover {
+    background: #f2f6f9;
+    cursor: pointer;
+}
+
+/* 页脚 */
+.page-footer {
+    background: #ecf0f1;
+    padding: 20px;
+    text-align: center;
+    color: #2c3e50;
+    border-top: 1px solid #ccc;
+    margin-top: 30px;
+    clear: both;
+}
+
+/* 确保由于固定定位，右侧栏占位符与内容一致 */
+.right-sidebar {
+    float: left;
+    width: 240px;
+    position: relative;
+    min-width: 360px;
+}
+
+/* 响应式微调 */
+@media (max-width: 1000px) {
+    .top-nav { right: 10px; }
+    .promo-fixed { right: 10px; width: 200px; }
+}
