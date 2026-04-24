@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>春韵图书 · 数字展销 </title>
+    <!-- 整合原有样式 + 动画增强 + 登录注册对话框（本地存储验证） -->
+    <style>
+        /* ========== 全局重置 & 基础样式 (整合lab2-2504-126-index.css) ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', '微软雅黑', sans-serif;
+            background: #f9f7f3;
+            line-height: 1.5;
+        }
+
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .page-wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        /* ---------- 头部区域 ---------- */
+        .main-header {
+            background: #2c3e50;
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 500;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-img {
+            width: 48px;
+            height: 48px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid #bdc3c7;
+            padding: 3px;
+            background-clip: content-box;
+        }
+
+        .site-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        /* 固定导航 */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            right: 420px;
+            z-index: 999;
+            padding: 8px 20px;
+            margin: 8px 0;
+            background-color: rgba(44, 62, 80, 0.85);
+            border-radius: 40px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            backdrop-filter: blur(4px);
+        }
+
+        .nav-list {
+            list-style: none;
+        }
+
+        .nav-list li {
+            float: left;
+            margin: 0 5px;
+        }
+
+        .nav-list li a {
+            display: inline-block;
+            padding: 8px 18px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 30px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-list li a:hover {
+            background-color: #e67e22;
+            border-color: #f39c12;
+        }
+
+        /* 头部右侧操作区 */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            position: relative; 
+        }
+
+        .login-btn {
+            background: #e67e22;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 15px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;  
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(120deg, #f39c12, #d35400);
+            transform: scale(1.1);
+            box-shadow: 0 8px 18px rgba(211, 84, 0, 0.4);
+        }
+
+        .cart-icon, .search-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            margin-left: 18px;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.6, 1.1);
+            transform-origin: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(2px);
+        }
+
+        .cart-icon:hover, .search-icon:hover {
+            transform: rotate(12deg) scale(1.18);
+            background: rgba(230, 126, 34, 0.85);
+            color: white;
+        }
+
+        /* 主体内容区 */
+        .main-content {
+            margin: 20px 24px;
+        }
+
+        .left-sidebar {
+            float: left;
+            width: 220px;
+            margin-right: 20px;
+            background: #fefefe;
+            border-radius: 16px;
+            padding: 16px 12px;
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+
+        .category-nav h3 {
+            margin-bottom: 16px;
+            font-size: 1.3rem;
+            border-bottom: 2px dashed #b0c4de;
+            padding-bottom: 10px;
+        }
+
+        .cat-list {
+            list-style: none;
+        }
+
+        .cat-list li {
+            margin-bottom: 10px;
+        }
+
+        .cat-list li a {
+            text-decoration: none;
+            color: #2c3e50;
+            display: block;
+            padding: 8px 10px;
+            border-radius: 30px;
+            background: #f8fafc;
+            border-left: 4px solid #3498db;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            transform-origin: left center;
+        }
+
+        .cat-list li a:hover {
+            transform: translateX(6px) skewX(-3deg);
+            background: #fdebd0;
+            border-left-color: #e67e22;
+        }
+
+        .relative-badge {
+            position: relative;
+            top: 10px;
+            left: -5px;
+            background: #e74c3c;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 18px;
+            box-shadow: 2px 4px 8px rgba(231, 76, 60, 0.3);
+        }
+
+        .content-main {
+            float: left;
+            width: calc(100% - 480px);
+            margin-right: 20px;
+            background: #ffffff;
+            padding: 16px 18px;
+            border-radius: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        .right-sidebar {
+            float: left;
+            width: 240px;
+            position: relative;
+            min-height: 360px;
+        }
+
+        .promo-fixed {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            width: 240px;
+            background: #fff9e6;
+            border-radius: 20px;
+            padding: 22px 16px;
+            border: 2px solid #f1c40f;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+            z-index: 99;  /* 改为99，远小于模态框的2000 */
+            animation: floatPromo 3s infinite ease-in-out;
+            transition: all 0.2s;
+        }
+
+        .promo-fixed:hover {
+            animation-play-state: paused;
+            transform: scale(1.01);
+        }
+
+        @keyframes floatPromo {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); box-shadow: 0 20px 30px rgba(0,0,0,0.15);}
+            100% { transform: translateY(0px); }
+        }
+
+        .promo-fixed h3 {
+            color: #b64926;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            border-left: 6px solid #e67e22;
+            padding-left: 12px;
+        }
+
+        .promo-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .promo-list li {
+            padding: 8px 5px;
+            border-bottom: 1px dotted #d4ac0d;
+            font-weight: 500;
+        }
+
+        .ad-tag {
+            margin-top: 20px;
+            background: #d5dbdb;
+            padding: 10px;
+            text-align: center;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* 图书卡片与动画 */
+        .book-card {
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            transform-origin: center;
+            background: #fdfdfd;
+            border-radius: 16px;
+            padding: 16px 12px 18px;
+            flex: 1 1 160px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .book-card:hover {
+            transform: translateX(8px) scale(1.03);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.35);
+            background: #ffffff;
+            border-color: #e67e22;
+        }
+
+        .book-cover {
+            overflow: hidden;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .book-card:hover .book-cover img {
+            transform: scale(1.02) rotate(0.5deg);
+            transition: transform 0.35s ease;
+        }
+
+        .book-cover img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 10px;
+            display: block;
+            border: 1px solid #ced4da;
+            padding: 3px;
+            background-clip: content-box;
+        }
+
+        .hover-detail {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.25s;
+            pointer-events: none;
+            color: white;
+        }
+
+        .book-cover:hover .hover-detail {
+            opacity: 1;
+        }
+
+        .quick-view {
+            background: #e67e22;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .add-to-cart {
+            transition: all 0.25s ease-out;
+            transform-origin: center;
+            cursor: pointer;
+            border: none;
+            background: #2ecc71;
+            padding: 8px 14px;
+            border-radius: 40px;
+            color: white;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .add-to-cart:hover {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            transform: scale(1.08);
+            box-shadow: 0 6px 12px rgba(230, 126, 34, 0.4);
+        }
+
+        /* 轮播 */
+        .carousel-container {
+            margin-bottom: 30px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .carousel {
+            width: 100%;
+            height: 280px;
+            position: relative;
+            overflow: hidden;
+            background: #2c3e50;
+        }
+
+        .carousel-slides {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-slides .slide:nth-child(1) { background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.2)), url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%25\' height=\'100%25\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%2334495e\'/%3E%3Ctext x=\'30%25\' y=\'55%25\' font-size=\'28\' fill=\'white\'%3E📘 深入理解计算机系统%3C/text%3E%3C/svg%3E'); animation: slideShow1 12s infinite; }
+        .carousel-slides .slide:nth-child(2) { background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.2)), url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%25\' height=\'100%25\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%238e44ad\'/%3E%3Ctext x=\'35%25\' y=\'55%25\' font-size=\'28\' fill=\'white\'%3E🎨 设计模式%3C/text%3E%3C/svg%3E'); animation: slideShow2 12s infinite; }
+        .carousel-slides .slide:nth-child(3) { background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.2)), url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%25\' height=\'100%25\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23298Oaa\'/%3E%3Ctext x=\'25%25\' y=\'55%25\' font-size=\'28\' fill=\'white\'%3E⚡ JavaScript高级程序设计%3C/text%3E%3C/svg%3E'); animation: slideShow3 12s infinite; }
+
+        @keyframes slideShow1 { 0%,30%{opacity:1;z-index:2;} 33%,100%{opacity:0;z-index:1;} }
+        @keyframes slideShow2 { 0%,30%{opacity:0;} 33%,63%{opacity:1;z-index:2;} 66%,100%{opacity:0;} }
+        @keyframes slideShow3 { 0%,63%{opacity:0;} 66%,96%{opacity:1;z-index:2;} 100%{opacity:0;} }
+
+        .slide-content {
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(4px);
+            padding: 20px 36px;
+            border-radius: 60px;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .hot-item {
+            float: left;
+            width: calc(33.333% - 12px);
+            margin-right: 12px;
+            margin-bottom: 12px;
+            background: #f4f6f9;
+            padding: 12px 8px;
+            border-radius: 30px;
+            text-align: center;
+            border: 1px solid #d5dbdb;
+            font-weight: 500;
+            cursor: pointer;
+            animation: gentleBounce 2.4s infinite ease-in-out;
+        }
+
+        @keyframes gentleBounce {
+            0% { transform: translateY(0px); opacity: 0.9; }
+            50% { transform: translateY(-5px); opacity: 1; }
+            100% { transform: translateY(0px); opacity: 0.9; }
+        }
+
+        .hot-item:hover {
+            animation: none;
+            transform: scale(1.02) translateY(-3px);
+            background: #fad7a0;
+        }
+
+        /* 登录/注册对话框 ———— 父相子绝，显示隐藏 */
+        .modal-overlay {
+            position: fixed;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 2000;  /* 改为9999，确保最高 */
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-container {
+            position: relative;
+            z-index: 10000;  /* 新增这行，确保内容也在最上层 */
+            width: 380px;
+            background: white;
+            border-radius: 28px;
+            padding: 28px 24px;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+            animation: modalPop 0.3s ease;
+        }
+
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px; right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #7f8c8d;
+            transition: 0.2s;
+        }
+        .modal-close:hover { color: #e67e22; transform: rotate(90deg); }
+
+        .tabs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #eee;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            font-weight: bold;
+            padding: 8px 0;
+            cursor: pointer;
+            color: #7f8c8d;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-btn.active {
+            color: #e67e22;
+            border-bottom-color: #e67e22;
+        }
+
+        .form-panel {
+            display: block;
+        }
+        .form-panel.hide {
+            display: none;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d0d7dd;
+            border-radius: 40px;
+            font-size: 1rem;
+        }
+        .auth-action {
+            background: #e67e22;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        .auth-action:hover {
+            background: #d35400;
+            transform: scale(1.02);
+        }
+        .msg-tip {
+            margin-top: 12px;
+            color: #c0392b;
+            font-size: 0.9rem;
+            min-height: 24px;
+        }
+        .book-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 16px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        .book-table thead th {
+            background: #f39c12;
+            color: #fff;
+            padding: 14px 16px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            border: none;
+        }
+
+        .book-table thead th:first-child {
+            border-radius: 16px 0 0 0;
+        }
+
+        .book-table thead th:last-child {
+            border-radius: 0 16px 0 0;
+        }
+
+        .book-table td, .book-table th {
+            padding: 14px 16px;
+        }
+
+        .book-table td {
+            border-bottom: 1px solid #f0f0f0;
+            color: #2c3e50;
+            font-weight: 500;
+            transition: all 0.25s ease;
+        }
+
+        .book-table tbody tr:hover {
+            background: #fef7e9;
+            transform: translateX(4px);
+            cursor: pointer;
+        }
+
+        .book-table tbody tr:last-child td:first-child {
+            border-radius: 0 0 0 16px;
+        }
+
+        .book-table tbody tr:last-child td:last-child {
+            border-radius: 0 0 16px 0;
+        }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .page-footer {
+            background: #ecf0f1;
+            padding: 20px;
+            text-align: center;
+            clear: both;
+            animation: gentleBounce 3s infinite ease;
+        }
+
+        @media (max-width: 860px) {
+            .top-nav { right: 10px; }
+            .content-main { width: 100%; float: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrapper">
+    <header class="main-header">
+        <div class="logo-area">
+            <img src="image.jpg" alt="Logo" class="logo-img">
+            <span class="site-name">📚 春韵图书 · 数字展销</span>
+        </div>
+        <nav class="top-nav">
+            <ul class="nav-list clearfix">
+                <li><a>首页</a></li>
+                <li><a>畅销榜</a></li>
+                <li><a>新书</a></li>
+                <li><a>关于</a></li>
+                <li><a>联系</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <button class="login-btn" id="showLoginBtn">🔑 登录</button>
+            <div class="icon-group-header">
+                <div class="cart-icon" title="购物车">🛒</div>
+                <div class="search-icon" title="搜索">🔍</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 登录/注册模态框 (父相子绝 + 显示隐藏) -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-container">
+            <span class="modal-close" id="closeModalBtn">&times;</span>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="login">登录</button>
+                <button class="tab-btn" data-tab="register">注册</button>
+            </div>
+            <!-- 登录面板 -->
+            <div id="loginPanel" class="form-panel">
+                <div class="input-group">
+                    <label>👤 用户名</label>
+                    <input type="text" id="loginUsername" placeholder="请输入用户名" autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label>🔒 密码</label>
+                    <input type="password" id="loginPassword" placeholder="******">
+                </div>
+                <button class="auth-action" id="loginSubmitBtn">登 录</button>
+                <div class="msg-tip" id="loginMsg"></div>
+            </div>
+            <!-- 注册面板 (集成在登录对话框内) -->
+            <div id="registerPanel" class="form-panel hide">
+                <div class="input-group">
+                    <label>👤 用户名</label>
+                    <input type="text" id="regUsername" placeholder="字母数字组合">
+                </div>
+                <div class="input-group">
+                    <label>🔒 密码</label>
+                    <input type="password" id="regPassword" placeholder="不少于6位">
+                </div>
+                <div class="input-group">
+                    <label>✔️ 确认密码</label>
+                    <input type="password" id="regConfirm" placeholder="再次输入密码">
+                </div>
+                <button class="auth-action" id="registerSubmitBtn">注 册</button>
+                <div class="msg-tip" id="registerMsg"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content clearfix">
+        <aside class="sidebar left-sidebar">
+            <div class="category-nav">
+                <h3>📖 图书分类</h3>
+                <ul class="cat-list">
+                    <li><a>📕 文学小说</a></li>
+                    <li><a>📗 人文社科</a></li>
+                    <li><a>📘 经济管理</a></li>
+                    <li><a>📙 科技科普</a></li>
+                    <li><a>📔 艺术生活</a></li>
+                    <li><a>📓 少儿读物</a></li>
+                    <li><a>🔖 考试教育</a></li>
+                </ul>
+                <div class="relative-badge">🔥 今日特价</div>
+            </div>
+        </aside>
+
+        <main class="content-main">
+            <div class="carousel-container">
+                <div class="carousel">
+                    <div class="carousel-slides">
+                        <div class="slide"><div class="slide-content">📖 深入理解计算机系统 · 经典必读</div></div>
+                        <div class="slide"><div class="slide-content">🎨 设计模式 · 面向对象精髓</div></div>
+                        <div class="slide"><div class="slide-content">⚡ JavaScript高级程序设计 · 权威指南</div></div>
+                    </div>
+                </div>
+            </div>
+            <section class="book-showcase">
+                <h2>✨ 精选图书</h2>
+                <div class="showcase-grid relative-parent">
+                    <div class="book-card">
+                        <div class="book-cover">
+                            <img src="image1.jpg" alt="book">
+                            <div class="hover-detail"><span class="quick-view">🔍 快速预览</span></div>
+                        </div>
+                        <h4>深入理解计算机系统</h4>
+                        <p class="price">¥139.00</p>
+                        <button class="add-to-cart">🛒 加入购物车</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">
+                            <img src="image2.jpg" alt="book">
+                            <div class="hover-detail"><span class="quick-view">🔍 快速预览</span></div>
+                        </div>
+                        <h4>设计模式：可复用面向对象</h4>
+                        <p class="price">¥89.00</p>
+                        <button class="add-to-cart">🛒 加入购物车</button>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover">
+                            <img src="image3.jpg" alt="book">
+                            <div class="hover-detail"><span class="quick-view">🔍 快速预览</span></div>
+                        </div>
+                        <h4>JavaScript高级程序设计</h4>
+                        <p class="price">¥129.00</p>
+                        <button class="add-to-cart">🛒 加入购物车</button>
+                    </div>
+                </div>
+            </section>
+            <section class="hot-recommend">
+                <h2>🔥 热门推荐</h2>
+                <div class="hot-list clearfix">
+                    <div class="hot-item">《三体：全集》</div>
+                    <div class="hot-item">《活着》</div>
+                    <div class="hot-item">《人类简史》</div>
+                    <div class="hot-item">《Python从入门到实践》</div>
+                    <div class="hot-item">《百年孤独》</div>
+                    <div class="hot-item">《小狗钱钱》</div>
+                </div>
+            </section>
+            <section class="new-books">
+                <h2>📅 新书上市</h2>
+                <table class="book-table">
+                    <thead><tr><th>书名</th><th>作者</th><th>定价</th></tr></thead>
+                    <tbody>
+                        <tr><td>人工智能现代方法</td><td>Stuart Russell</td><td>¥198.00</td></tr>
+                        <tr><td>微服务架构设计模式</td><td>Chris Richardson</td><td>¥139.00</td></tr>
+                        <tr><td>置身事内</td><td>兰小欢</td><td>¥65.00</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+
+        <aside class="sidebar right-sidebar">
+            <div class="promo-fixed">
+                <h3>🎁 限时促销</h3>
+                <ul class="promo-list">
+                    <li>📌 满300减50</li>
+                    <li>📌 精选图书5折起</li>
+                    <li>📌 新用户专享券</li>
+                    <li>📌 会员日双倍积分</li>
+                </ul>
+                <p class="fixed-note">✨ 每日秒杀 ✨</p>
+                <div class="ad-tag">📢 广告位招租</div>
+            </div>
+        </aside>
+    </div>
+    <footer class="page-footer">
+        <p>© 2026 数字图书展销 </p>
+    </footer>
+</div>
+
+<script>
+    (function() {
+        "use strict";
+
+        // ---------- 登录注册模态框 (显示/隐藏，父相子绝) ----------
+        const modal = document.getElementById('authModal');
+        const showBtn = document.getElementById('showLoginBtn');
+        const closeBtn = document.getElementById('closeModalBtn');
+        const tabs = document.querySelectorAll('.tab-btn');
+        const loginPanel = document.getElementById('loginPanel');
+        const registerPanel = document.getElementById('registerPanel');
+
+        const loginUsername = document.getElementById('loginUsername');
+        const loginPassword = document.getElementById('loginPassword');
+        const loginMsg = document.getElementById('loginMsg');
+        const loginSubmit = document.getElementById('loginSubmitBtn');
+
+        const regUsername = document.getElementById('regUsername');
+        const regPassword = document.getElementById('regPassword');
+        const regConfirm = document.getElementById('regConfirm');
+        const registerMsg = document.getElementById('registerMsg');
+        const registerSubmit = document.getElementById('registerSubmitBtn');
+
+        // 显示模态框
+        function openModal() {
+            modal.style.display = 'flex';
+            // 默认激活登录标签
+            setActiveTab('login');
+        }
+        function closeModal() {
+            modal.style.display = 'none';
+            clearMessages();
+        }
+        function clearMessages() {
+            loginMsg.textContent = '';
+            registerMsg.textContent = '';
+        }
+        function setActiveTab(tabId) {
+            tabs.forEach(t => {
+                if (t.dataset.tab === tabId) t.classList.add('active');
+                else t.classList.remove('active');
+            });
+            if (tabId === 'login') {
+                loginPanel.classList.remove('hide');
+                registerPanel.classList.add('hide');
+            } else {
+                registerPanel.classList.remove('hide');
+                loginPanel.classList.add('hide');
+            }
+            clearMessages();
+        }
+
+        showBtn.addEventListener('click', openModal);
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => setActiveTab(tab.dataset.tab));
+        });
+
+        // ---------- 本地存储操作 ----------
+        const STORAGE_KEY = 'bookstore_users'; // 存储所有注册用户
+
+        function getUsers() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            return stored ? JSON.parse(stored) : {};
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+        }
+
+        // 注册逻辑
+        registerSubmit.addEventListener('click', () => {
+            const username = regUsername.value.trim();
+            const password = regPassword.value;
+            const confirm = regConfirm.value;
+
+            if (!username || !password) {
+                registerMsg.textContent = '❌ 用户名和密码不能为空';
+                return;
+            }
+            if (password.length < 6) {
+                registerMsg.textContent = '❌ 密码长度至少6位';
+                return;
+            }
+            if (password !== confirm) {
+                registerMsg.textContent = '❌ 两次密码不一致';
+                return;
+            }
+
+            const users = getUsers();
+            if (users[username]) {
+                registerMsg.textContent = '❌ 用户名已存在';
+                return;
+            }
+
+            // 存储用户 (密码明文，实验要求本地存储验证)
+            users[username] = { password: password };
+            saveUsers(users);
+            registerMsg.style.color = '#27ae60';
+            registerMsg.textContent = '✅ 注册成功！请登录';
+            // 清空输入
+            regUsername.value = '';
+            regPassword.value = '';
+            regConfirm.value = '';
+            // 切换到登录tab
+            setTimeout(() => setActiveTab('login'), 800);
+        });
+
+        // 登录逻辑 (与本地存储比对)
+        loginSubmit.addEventListener('click', () => {
+            const username = loginUsername.value.trim();
+            const password = loginPassword.value;
+
+            if (!username || !password) {
+                loginMsg.textContent = '❌ 请输入用户名和密码';
+                return;
+            }
+
+            const users = getUsers();
+            const userRecord = users[username];
+            if (!userRecord) {
+                loginMsg.textContent = '❌ 用户不存在，请先注册';
+                return;
+            }
+            if (userRecord.password !== password) {
+                loginMsg.textContent = '❌ 密码错误';
+                return;
+            }
+
+            // 登录成功
+            loginMsg.style.color = '#27ae60';
+            loginMsg.textContent = `✅ 登录成功！欢迎 ${username}`;
+            // 可以更新登录按钮显示
+            showBtn.innerHTML = `👤 ${username}`;
+            // 延迟关闭
+            setTimeout(() => {
+                closeModal();
+                loginUsername.value = '';
+                loginPassword.value = '';
+                loginMsg.style.color = '';
+            }, 1200);
+        });
+
+        // 按回车快捷
+        [loginUsername, loginPassword].forEach(i => i.addEventListener('keypress', e => { if(e.key==='Enter') loginSubmit.click(); }));
+        [regUsername, regPassword, regConfirm].forEach(i => i.addEventListener('keypress', e => { if(e.key==='Enter') registerSubmit.click(); }));
+
+        // 预置测试账号 (可选)
+        (function initDefaultUser() {
+            const users = getUsers();
+            if (!users['test']) {
+                users['test'] = { password: '123456' };
+                saveUsers(users);
+            }
+        })();
+
+        // 动画/交互细节：点击空白关闭，购物车搜索仅演示
+        document.querySelectorAll('.add-to-cart').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                alert('📘 已加入购物车 (演示)');
+            });
+        });
+
+        // 登录按钮未登录时显示登录，登录后显示用户名；点击登录后如果已登录可选择退出? 仅演示
+    })();
+</script>
+</body>
+</html>
